@@ -4,18 +4,16 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"path/filepath"
-	"strings"
 
 	"github.com/universtar-org/tools/internal/api"
 	"github.com/universtar-org/tools/internal/io"
+	"github.com/universtar-org/tools/internal/utils"
 )
 
 // Update a file/user.
 func Update(client *api.Client, ctx context.Context, path string) error {
 	const MAX_TAG_NUMBER = 5
-	base := filepath.Base(path)
-	owner := strings.TrimSuffix(base, filepath.Ext(base))
+	owner := utils.ParseOwner(path)
 
 	projects, err := io.ReadYaml(path)
 	if err != nil {
