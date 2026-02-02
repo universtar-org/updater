@@ -45,20 +45,20 @@ func (c *Client) newRequest(ctx context.Context, method, path string) (*http.Req
 }
 
 // do Send the request and decode the response in `json` format.
-func (c *Client) do(req *http.Request, v any) error {
+func (c *Client) do(req *http.Request, v any) (int, error) {
 	resp, err := c.http.Do(req)
 	if err != nil {
-		return err
+		return http.StatusBadRequest, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
-		return fmt.Errorf("github api error: %s", resp.Status)
+		return resp.StatusCode, fmt.Errorf("github api error: %s", resp.Status)
 	}
 
 	if v != nil {
-		return json.NewDecoder(resp.Body).Decode(v)
+		return resp.StatusCode, json.NewDecoder(resp.Body).Decode(v)
 	}
 
-	return nil
+	return resp.StatusCode, nil
 }
