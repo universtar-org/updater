@@ -34,7 +34,7 @@ func main() {
 
 // Update a file/user.
 func update(client *api.Client, ctx context.Context, path string) error {
-	const MAX_TAG_NUMBER = 5
+	const maxTagNumber = 5
 	owner := utils.ParseOwner(path)
 
 	projects, err := io.ReadYaml(path)
@@ -54,14 +54,14 @@ func update(client *api.Client, ctx context.Context, path string) error {
 			return fmt.Errorf("Request Failed: Get %v", status)
 		}
 
-		tag_list := append([]string{repo.Language}, repo.Tags...)
-		if len(tag_list) > MAX_TAG_NUMBER {
-			tag_list = tag_list[:MAX_TAG_NUMBER]
+		tags := append([]string{repo.Language}, repo.Tags...)
+		if len(tags) > maxTagNumber {
+			tags = tags[:maxTagNumber]
 		}
 		projects[i].Description = repo.Description
 		projects[i].Stars = repo.Stars
 		projects[i].UpdatedAt = repo.UpdatedAt
-		projects[i].Tags = tag_list
+		projects[i].Tags = tags
 	}
 
 	io.WriteYaml(projects, path)
