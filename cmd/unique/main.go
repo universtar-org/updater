@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log/slog"
 	"os"
@@ -16,9 +17,11 @@ import (
 )
 
 func main() {
-	log.InitLogger(true)
+	opts := utils.ParseFlags()
+	log.InitLogger(opts.Debug)
 
-	if len(os.Args) != 2 {
+	args := flag.Args()
+	if len(args) != 1 {
 		slog.Error(
 			"invalid arguments",
 			"usage", "unique ${username}",
@@ -27,7 +30,7 @@ func main() {
 	}
 
 	client, ctx := utils.InitClientAndContext("")
-	username := os.Args[1]
+	username := args[0]
 
 	user, err := client.GetUser(ctx, username)
 	if err != nil {

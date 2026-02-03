@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -14,9 +15,11 @@ import (
 )
 
 func main() {
-	log.InitLogger(true)
+	opts := utils.ParseFlags()
+	log.InitLogger(opts.Debug)
 
-	if len(os.Args) != 2 {
+	args := flag.Args()
+	if len(args) != 1 {
 		slog.Error(
 			"invalid arguments",
 			"usage", "checker <data-file-dir>",
@@ -26,7 +29,7 @@ func main() {
 
 	client, ctx := utils.InitClientAndContext("")
 
-	dir := os.Args[1]
+	dir := args[0]
 	list, err := io.GetDataFiles(dir)
 	if err != nil {
 		slog.Error(
