@@ -23,3 +23,18 @@ func (c *Client) GetRepo(ctx context.Context, owner, repo string) (*model.Repo, 
 
 	return &r, status, nil
 }
+
+func (c *Client) GetRepoByUser(ctx context.Context, username string) ([]model.Repo, int, error) {
+	req, err := c.newRequest(ctx, http.MethodGet, fmt.Sprintf("/users/%s/repos", username))
+	if err != nil {
+		return nil, http.StatusBadRequest, err
+	}
+
+	var repos []model.Repo
+	status, err := c.do(req, &repos)
+	if err != nil {
+		return nil, http.StatusBadRequest, err
+	}
+
+	return repos, status, nil
+}
