@@ -20,7 +20,8 @@ func NewClient(token string) *Client {
 	return &Client{
 		baseURL: "https://api.github.com",
 		token:   token,
-		http: &http.Client{Timeout: 10 * time.Second,
+		http: &http.Client{
+			Timeout:       10 * time.Second,
 			CheckRedirect: func(req *http.Request, via []*http.Request) error { return http.ErrUseLastResponse },
 		},
 	}
