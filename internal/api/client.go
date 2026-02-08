@@ -29,7 +29,11 @@ func NewClient(token string) *Client {
 
 // newRequest Create a new request before sending.
 func (c *Client) newRequest(ctx context.Context, method, path string) (*http.Request, error) {
-	slog.Debug("build request", "method", method, "path", path)
+	slog.Debug(
+		"build request",
+		"method", method,
+		"path", path,
+	)
 
 	req, err := http.NewRequestWithContext(
 		ctx,
@@ -52,7 +56,10 @@ func (c *Client) newRequest(ctx context.Context, method, path string) (*http.Req
 
 // do Send the request and decode the response in `json` format.
 func (c *Client) do(req *http.Request, v any) (int, error) {
-	slog.Debug("send request", "method", req.Method, "url", req.URL.String())
+	slog.Debug("send request",
+		"method", req.Method,
+		"url", req.URL.String(),
+	)
 
 	resp, err := c.http.Do(req)
 	if err != nil {
@@ -60,7 +67,12 @@ func (c *Client) do(req *http.Request, v any) (int, error) {
 	}
 	defer resp.Body.Close()
 
-	slog.Debug("receive response", "method", req.Method, "url", req.URL.String(), "status", resp.StatusCode)
+	slog.Debug(
+		"receive response",
+		"method", req.Method,
+		"url", req.URL.String(),
+		"status", resp.StatusCode,
+	)
 
 	if resp.StatusCode >= 400 {
 		return resp.StatusCode, fmt.Errorf("github api error: %s", resp.Status)
