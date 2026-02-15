@@ -61,12 +61,37 @@ func (c *Client) do(req *http.Request, v any) (int, error) {
 		"url", req.URL.String(),
 	)
 
-	resp, err := c.http.Do(req)
+	const maxRetries = 5
+	var resp *http.Response
+	var err error
+
+	for i := range maxRetries {
+		resp, err = c.http.Do(req)
+		if err != nil {
+			slog.Info("send request failed",
+				"times", i+1,
+				"err", err,
+			)
+			time.Sleep(time.Duration(i+1) * time.Second)
+			continue
+		}
+		if resp.StatusCode != http.StatusOK {
+			slog.Info(
+				"send request failed",
+				"times", i+1,
+				"status", resp.Status,
+			)
+			resp.Body.Close()
+			time.Sleep(time.Duration(i+1) * time.Second)
+			continue
+		}
+	}
+
 	if err != nil {
 		return http.StatusBadRequest, fmt.Errorf("send request %s %s: %w", req.Method, req.URL.String(), err)
 	}
-	defer resp.Body.Close()
 
+	defer resp.Body.Close()
 	slog.Debug(
 		"receive response",
 		"method", req.Method,
