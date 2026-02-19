@@ -1,0 +1,14 @@
+- repo: universtar
+  stars: 0
+  description: A platform for university students to showcase and promote their projects.
+  tags:
+    - HTML
+    - hugo
+    - universtar
+  updated_at: "2026-02-03T13:56:19Z"
+- repo: tools
+  stars: 0
+  description: A tool used to fetch and update project data for universtar.
+  tags:
+    - Go
+  updated_at: "2026-02-03T13:58:00Z"
