@@ -1,9 +1,9 @@
 package io_test
 
 import (
-	"github.com/google/go-cmp/cmp"
 	"github.com/universtar-org/tools/internal/io"
 	"github.com/universtar-org/tools/internal/model"
+	"github.com/universtar-org/tools/internal/utils"
 	"testing"
 )
 
@@ -63,9 +63,7 @@ func TestReadYaml(t *testing.T) {
 			if tt.wantErr {
 				t.Fatal("ReadYaml() succeeded unexpectedly")
 			}
-			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("mismatch (-want +got):\n%s", diff)
-			}
+			utils.HandleTestDiff(t, tt.want, got)
 		})
 	}
 }
